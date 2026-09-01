@@ -1,345 +1,353 @@
-local S = {
-    HttpService = "HttpService",
-    Players = "Players",
-    CoreGui = "CoreGui",
-    PlayerGui = "PlayerGui",
-    GuiName = "GustavoHubKey",
-    Title = "GUSTAVO HUB",
-    Placeholder = "Enter your key...",
-    Validate = "VALIDATE KEY",
-    Validating = "Validating...",
-    MissingKey = "Enter a key.",
-    Api = "https://gustavo-hub-api.errpila.workers.dev",
-    Json = "application/json",
-    NoCache = "no-cache",
-    GET = "GET",
-    POST = "POST",
-    ValidatePath = "/validate?key=",
-    ScriptPath = "/script",
-    KeyField = "key",
-    TokenField = "token",
-    ValidField = "valid",
-    SuccessField = "success",
-    ScriptField = "script",
-    ServerError = "server_error",
-    MissingKeyReason = "missing_key",
-    InvalidSession = "invalid_session"
+local _0x={
+    [1]="HttpService",
+    [2]="Players",
+    [3]="CoreGui",
+    [4]="PlayerGui",
+    [5]="GustavoHubKey",
+    [6]="GTZ HUB",
+    [7]="Introduz a tua key...",
+    [8]="VALIDAR KEY",
+    [9]="A validar...",
+    [10]="Introduz uma key.",
+    [11]="https://gustavo-hub-api.errpila.workers.dev",
+    [12]="application/json",
+    [13]="no-cache",
+    [14]="GET",
+    [15]="POST",
+    [16]="/validate?key=",
+    [17]="/script",
+    [18]="key",
+    [19]="token",
+    [20]="valid",
+    [21]="success",
+    [22]="script",
+    [23]="server_error",
+    [24]="missing_key",
+    [25]="invalid_session",
+    [26]="GUSTAVO_HUB_KEY",
+    [27]="GUSTAVO_HUB_TOKEN"
 }
 
-local gameRef = game
-local pcallRef = pcall
-local tostringRef = tostring
-local typeRef = type
+local function _s(n)
+    return _0x[n]
+end
 
-local HttpService = gameRef:GetService(S.HttpService)
-local Players = gameRef:GetService(S.Players)
+local _g=game
+local _pc=pcall
+local _ts=tostring
+local _ty=type
 
-local API = S.Api
+local _H=_g:GetService(_s(1))
+local _P=_g:GetService(_s(2))
 
-local function getRequest()
-    if typeRef(request) == "function" then
+local _A=_s(11)
+
+local function _rq()
+    if _ty(request)=="function" then
         return request
     end
 
-    if typeRef(http_request) == "function" then
+    if _ty(http_request)=="function" then
         return http_request
     end
 
-    if syn and typeRef(syn.request) == "function" then
+    if syn and _ty(syn.request)=="function" then
         return syn.request
     end
 
-    if fluxus and typeRef(fluxus.request) == "function" then
+    if fluxus and _ty(fluxus.request)=="function" then
         return fluxus.request
     end
 
     return nil
 end
 
-local httpRequest = getRequest()
+local _r=_rq()
 
-if not httpRequest then
-    warn("GUSTAVO HUB: HTTP requests are unavailable.")
+if not _r then
+    warn("GTZ HUB: HTTP indisponível.")
     return
 end
 
-local function http(method, url, body)
-    local options = {
-        Url = url,
-        Method = method,
-        Headers = {
-            ["Accept"] = S.Json,
-            ["Cache-Control"] = S.NoCache
+local function _http(_m,_u,_b)
+    local _o={
+        Url=_u,
+        Method=_m,
+        Headers={
+            ["Accept"]=_s(12),
+            ["Cache-Control"]=_s(13)
         }
     }
 
-    if body ~= nil then
-        options.Headers["Content-Type"] = S.Json
-        options.Body = HttpService:JSONEncode(body)
+    if _b then
+        _o.Headers["Content-Type"]=_s(12)
+        _o.Body=_H:JSONEncode(_b)
     end
 
-    local success, response = pcallRef(function()
-        return httpRequest(options)
+    local _ok,_res=_pc(function()
+        return _r(_o)
     end)
 
-    if not success or not response then
+    if not _ok or not _res then
         return nil
     end
 
-    local status = tonumber(
-        response.StatusCode
-        or response.Status
-        or 0
-    )
+    local _st=
+        tonumber(
+            _res.StatusCode or
+            _res.Status or
+            0
+        )
 
-    local responseBody =
-        response.Body
-        or response.body
+    local _body=
+        _res.Body or
+        _res.body
 
-    if status < 200 or status >= 300 or not responseBody then
+    if _st<200 or _st>=300 or not _body then
         return nil
     end
 
-    local decoded, data = pcallRef(function()
-        return HttpService:JSONDecode(responseBody)
+    local _dok,_data=_pc(function()
+        return _H:JSONDecode(_body)
     end)
 
-    if not decoded or typeRef(data) ~= "table" then
+    if not _dok or _ty(_data)~="table" then
         return nil
     end
 
-    return data
+    return _data
 end
 
-local function getStoredKey()
-    if typeRef(getgenv) == "function" then
-        local environment = getgenv()
+local function _key()
+    if getgenv then
+        local _v=getgenv()[_s(26)]
 
-        local value = environment.GUSTAVO_HUB_KEY
-
-        if typeRef(value) == "string" and value ~= "" then
-            return value
+        if _ty(_v)=="string" and _v~="" then
+            return _v
         end
     end
 
     return nil
 end
 
-local function createKeyGui()
-    local player = Players.LocalPlayer
+local function _gui()
+    local _pl=_P.LocalPlayer
 
-    if not player then
+    if not _pl then
         return nil
     end
 
-    local oldGui
+    local _old
 
-    pcallRef(function()
-        oldGui = gameRef:GetService(S.CoreGui):FindFirstChild(S.GuiName)
+    _pc(function()
+        _old=_g:GetService(_s(3)):FindFirstChild(_s(5))
     end)
 
-    if oldGui then
-        oldGui:Destroy()
+    if _old then
+        _old:Destroy()
     end
 
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = S.GuiName
-    screenGui.ResetOnSpawn = false
-    screenGui.IgnoreGuiInset = true
+    local _q=Instance.new("ScreenGui")
+    _q.Name=_s(5)
+    _q.ResetOnSpawn=false
+    _q.IgnoreGuiInset=true
 
-    local parent
+    local _parent
 
-    pcallRef(function()
-        parent = gameRef:GetService(S.CoreGui)
+    _pc(function()
+        _parent=_g:GetService(_s(3))
     end)
 
-    if not parent then
-        parent = player:WaitForChild(S.PlayerGui)
+    if not _parent then
+        _parent=_pl:WaitForChild(_s(4))
     end
 
-    screenGui.Parent = parent
+    _q.Parent=_parent
 
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.fromOffset(420, 210)
-    frame.Position = UDim2.new(0.5, -210, 0.5, -105)
-    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    frame.BorderSizePixel = 0
-    frame.Parent = screenGui
+    local _f=Instance.new("Frame")
+    _f.Size=UDim2.fromOffset(420,210)
+    _f.Position=UDim2.new(.5,-210,.5,-105)
+    _f.BackgroundColor3=Color3.fromRGB(20,20,20)
+    _f.BorderSizePixel=0
+    _f.Parent=_q
 
-    local frameCorner = Instance.new("UICorner")
-    frameCorner.CornerRadius = UDim.new(0, 12)
-    frameCorner.Parent = frame
+    local _fc=Instance.new("UICorner")
+    _fc.CornerRadius=UDim.new(0,12)
+    _fc.Parent=_f
 
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, -30, 0, 40)
-    title.Position = UDim2.fromOffset(15, 12)
-    title.BackgroundTransparency = 1
-    title.Text = S.Title
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 24
-    title.Parent = frame
+    local _t=Instance.new("TextLabel")
+    _t.Size=UDim2.new(1,-30,0,40)
+    _t.Position=UDim2.fromOffset(15,12)
+    _t.BackgroundTransparency=1
+    _t.Text=_s(6)
+    _t.TextColor3=Color3.fromRGB(255,255,255)
+    _t.Font=Enum.Font.GothamBold
+    _t.TextSize=24
+    _t.Parent=_f
 
-    local input = Instance.new("TextBox")
-    input.Size = UDim2.new(1, -40, 0, 45)
-    input.Position = UDim2.fromOffset(20, 65)
-    input.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    input.BorderSizePixel = 0
-    input.PlaceholderText = S.Placeholder
-    input.Text = ""
-    input.TextColor3 = Color3.fromRGB(255, 255, 255)
-    input.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-    input.Font = Enum.Font.Gotham
-    input.TextSize = 15
-    input.ClearTextOnFocus = false
-    input.Parent = frame
+    local _b=Instance.new("TextBox")
+    _b.Size=UDim2.new(1,-40,0,45)
+    _b.Position=UDim2.fromOffset(20,65)
+    _b.BackgroundColor3=Color3.fromRGB(35,35,35)
+    _b.BorderSizePixel=0
+    _b.PlaceholderText=_s(7)
+    _b.Text=""
+    _b.TextColor3=Color3.fromRGB(255,255,255)
+    _b.PlaceholderColor3=Color3.fromRGB(150,150,150)
+    _b.Font=Enum.Font.Gotham
+    _b.TextSize=15
+    _b.ClearTextOnFocus=false
+    _b.Parent=_f
 
-    local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 8)
-    inputCorner.Parent = input
+    local _bc=Instance.new("UICorner")
+    _bc.CornerRadius=UDim.new(0,8)
+    _bc.Parent=_b
 
-    local validateButton = Instance.new("TextButton")
-    validateButton.Size = UDim2.new(1, -40, 0, 42)
-    validateButton.Position = UDim2.fromOffset(20, 125)
-    validateButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-    validateButton.BorderSizePixel = 0
-    validateButton.Text = S.Validate
-    validateButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    validateButton.Font = Enum.Font.GothamBold
-    validateButton.TextSize = 15
-    validateButton.Parent = frame
+    local _x=Instance.new("TextButton")
+    _x.Size=UDim2.new(1,-40,0,42)
+    _x.Position=UDim2.fromOffset(20,125)
+    _x.BackgroundColor3=Color3.fromRGB(170,0,0)
+    _x.BorderSizePixel=0
+    _x.Text=_s(8)
+    _x.TextColor3=Color3.fromRGB(255,255,255)
+    _x.Font=Enum.Font.GothamBold
+    _x.TextSize=15
+    _x.Parent=_f
 
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 8)
-    buttonCorner.Parent = validateButton
+    local _xc=Instance.new("UICorner")
+    _xc.CornerRadius=UDim.new(0,8)
+    _xc.Parent=_x
 
-    local status = Instance.new("TextLabel")
-    status.Size = UDim2.new(1, -40, 0, 25)
-    status.Position = UDim2.fromOffset(20, 172)
-    status.BackgroundTransparency = 1
-    status.Text = ""
-    status.TextColor3 = Color3.fromRGB(255, 255, 255)
-    status.Font = Enum.Font.Gotham
-    status.TextSize = 13
-    status.Parent = frame
+    local _z=Instance.new("TextLabel")
+    _z.Size=UDim2.new(1,-40,0,25)
+    _z.Position=UDim2.fromOffset(20,172)
+    _z.BackgroundTransparency=1
+    _z.Text=""
+    _z.TextColor3=Color3.fromRGB(255,255,255)
+    _z.Font=Enum.Font.Gotham
+    _z.TextSize=13
+    _z.Parent=_f
 
-    local result
+    local _result
 
-    validateButton.MouseButton1Click:Connect(function()
-        local value = tostringRef(input.Text or "")
-            :gsub("^%s+", "")
-            :gsub("%s+$", "")
+    _x.MouseButton1Click:Connect(function()
+        local _v=tostring(_b.Text or "")
+            :gsub("^%s+","")
+            :gsub("%s+$","")
 
-        if value == "" then
-            status.Text = S.MissingKey
+        if _v=="" then
+            _z.Text=_s(10)
             return
         end
 
-        status.Text = S.Validating
-        result = value
+        _z.Text=_s(9)
+        _result=_v
     end)
 
-    while not result do
+    while not _result do
         task.wait()
     end
 
-    screenGui:Destroy()
+    _q:Destroy()
 
-    return result
+    return _result
 end
 
-local key = getStoredKey()
+local _k=_key()
 
-if not key then
-    key = createKeyGui()
+if not _k then
+    _k=_gui()
 end
 
-if not key then
-    warn("GUSTAVO HUB: No key was provided.")
+if not _k then
+    warn("GTZ HUB: key não encontrada.")
     return
 end
 
-key = tostringRef(key)
-    :gsub("^%s+", "")
-    :gsub("%s+$", "")
+_k=tostring(_k)
+    :gsub("^%s+","")
+    :gsub("%s+$","")
     :upper()
 
-local validation = http(
-    S.GET,
-    API .. S.ValidatePath .. HttpService:UrlEncode(key)
+local _v=_http(
+    _s(14),
+    _A.._s(16).._H:UrlEncode(_k)
 )
 
-if not validation or validation[S.ValidField] ~= true then
+if not _v or _v[_s(20)]~=true then
     warn(
-        "GUSTAVO HUB: Key rejected (" ..
-        tostringRef(
-            validation and validation.reason
-            or S.ServerError
-        ) ..
+        "GTZ HUB: key recusada ("..
+        tostring(_v and _v.reason or _s(23))..
         ")."
     )
 
     return
 end
 
-local token = validation[S.TokenField]
+local _token=_v[_s(19)]
 
-if typeRef(token) ~= "string" or token == "" then
-    warn("GUSTAVO HUB: Invalid session.")
+if _ty(_token)~="string" or _token=="" then
+    warn("GTZ HUB: sessão inválida.")
     return
 end
 
-local payload = http(
-    S.POST,
-    API .. S.ScriptPath,
+local _payload=_http(
+    _s(15),
+    _A.._s(17),
     {
-        [S.TokenField] = token
+        token=_token
     }
 )
 
-if not payload or payload[S.SuccessField] ~= true then
+if not _payload or _payload[_s(21)]~=true then
     warn(
-        "GUSTAVO HUB: Unable to obtain the script (" ..
-        tostringRef(
-            payload and payload.reason
-            or S.ServerError
-        ) ..
+        "GTZ HUB: não foi possível obter o script ("..
+        tostring(
+            _payload and
+            _payload.reason or
+            _s(23)
+        )..
         ")."
     )
 
     return
 end
 
-local code = payload[S.ScriptField]
+local _code=_payload[_s(22)]
 
-if typeRef(code) ~= "string" or code == "" then
-    warn("GUSTAVO HUB: Empty script received.")
+if _ty(_code)~="string" or _code=="" then
+    warn("GTZ HUB: script vazio.")
     return
 end
 
-local load = loadstring
+if getgenv then
+    getgenv()[_s(26)]=_k
+    getgenv()[_s(27)]=_token
+end
 
-if typeRef(load) ~= "function" then
-    warn("GUSTAVO HUB: loadstring is unavailable.")
+local _load=loadstring
+
+if _ty(_load)~="function" then
+    warn("GTZ HUB: loadstring indisponível.")
     return
 end
 
-local compiled, compileError = load(code)
+local _fn,_err=_load(_code)
 
-if not compiled then
+if not _fn then
     warn(
-        "GUSTAVO HUB: Script compilation failed: " ..
-        tostringRef(compileError)
+        "GTZ HUB: erro ao carregar o script: "..
+        tostring(_err)
     )
 
     return
 end
 
-local executed, runtimeError = pcallRef(compiled)
+local _ok,_runtime=_pc(_fn)
 
-if not executed then
+if not _ok then
     warn(
-        "GUSTAVO HUB: Script execution failed: " ..
-        tostringRef(runtimeError)
+        "GTZ HUB: erro ao executar o script: "..
+        tostring(_runtime)
     )
 end
