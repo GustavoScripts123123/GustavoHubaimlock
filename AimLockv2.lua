@@ -37,6 +37,9 @@ local _pc=pcall
 local _ts=tostring
 local _ty=type
 
+-- Logo do GTZ HUB: substitui pelo ID da imagem enviada para o Roblox.
+local _LOGO="rbxassetid://125548024440666"
+
 local _H=_g:GetService(_s(1))
 local _P=_g:GetService(_s(2))
 
@@ -165,29 +168,59 @@ local function _gui()
     _q.Parent=_parent
 
     local _f=Instance.new("Frame")
-    _f.Size=UDim2.fromOffset(420,210)
-    _f.Position=UDim2.new(.5,-210,.5,-105)
+    _f.Size=UDim2.fromOffset(420,420)
+    _f.Position=UDim2.new(.5,-210,.5,-210)
     _f.BackgroundColor3=Color3.fromRGB(20,20,20)
     _f.BorderSizePixel=0
     _f.Parent=_q
+
+    local _background=Instance.new("ImageLabel")
+    _background.Name="GTZHubLogoBackground"
+    _background.Size=UDim2.fromScale(1,1)
+    _background.Position=UDim2.fromOffset(0,0)
+    _background.BackgroundTransparency=1
+    _background.Image=_LOGO
+    _background.ScaleType=Enum.ScaleType.Crop
+    _background.ZIndex=0
+    _background.Parent=_f
+
+    local _overlay=Instance.new("Frame")
+    _overlay.Name="Overlay"
+    _overlay.Size=UDim2.fromScale(1,1)
+    _overlay.BackgroundColor3=Color3.fromRGB(8,4,12)
+    _overlay.BackgroundTransparency=0.45
+    _overlay.BorderSizePixel=0
+    _overlay.ZIndex=1
+    _overlay.Parent=_f
 
     local _fc=Instance.new("UICorner")
     _fc.CornerRadius=UDim.new(0,12)
     _fc.Parent=_f
 
+    local _logo=Instance.new("ImageLabel")
+    _logo.Name="GTZLogo"
+    _logo.Size=UDim2.fromOffset(72,72)
+    _logo.Position=UDim2.new(0.5,-36,0,18)
+    _logo.BackgroundTransparency=1
+    _logo.Image=_LOGO
+    _logo.ScaleType=Enum.ScaleType.Fit
+    _logo.ZIndex=2
+    _logo.Parent=_f
+
     local _t=Instance.new("TextLabel")
-    _t.Size=UDim2.new(1,-30,0,40)
-    _t.Position=UDim2.fromOffset(15,12)
+    _t.Size=UDim2.new(1,-40,0,40)
+    _t.Position=UDim2.fromOffset(20,92)
     _t.BackgroundTransparency=1
     _t.Text=_s(6)
     _t.TextColor3=Color3.fromRGB(255,255,255)
     _t.Font=Enum.Font.GothamBold
     _t.TextSize=24
+    _t.ZIndex=2
     _t.Parent=_f
 
     local _b=Instance.new("TextBox")
     _b.Size=UDim2.new(1,-40,0,45)
-    _b.Position=UDim2.fromOffset(20,65)
+    _b.Position=UDim2.fromOffset(20,150)
     _b.BackgroundColor3=Color3.fromRGB(35,35,35)
     _b.BorderSizePixel=0
     _b.PlaceholderText=_s(7)
@@ -197,6 +230,7 @@ local function _gui()
     _b.Font=Enum.Font.Gotham
     _b.TextSize=15
     _b.ClearTextOnFocus=false
+    _b.ZIndex=2
     _b.Parent=_f
 
     local _bc=Instance.new("UICorner")
@@ -205,13 +239,14 @@ local function _gui()
 
     local _x=Instance.new("TextButton")
     _x.Size=UDim2.new(1,-40,0,42)
-    _x.Position=UDim2.fromOffset(20,125)
-    _x.BackgroundColor3=Color3.fromRGB(170,0,0)
+    _x.Position=UDim2.fromOffset(20,210)
+    _x.BackgroundColor3=Color3.fromRGB(150,45,235)
     _x.BorderSizePixel=0
     _x.Text=_s(8)
     _x.TextColor3=Color3.fromRGB(255,255,255)
     _x.Font=Enum.Font.GothamBold
     _x.TextSize=15
+    _x.ZIndex=2
     _x.Parent=_f
 
     local _xc=Instance.new("UICorner")
@@ -220,12 +255,13 @@ local function _gui()
 
     local _z=Instance.new("TextLabel")
     _z.Size=UDim2.new(1,-40,0,25)
-    _z.Position=UDim2.fromOffset(20,172)
+    _z.Position=UDim2.fromOffset(20,260)
     _z.BackgroundTransparency=1
     _z.Text=""
     _z.TextColor3=Color3.fromRGB(255,255,255)
     _z.Font=Enum.Font.Gotham
     _z.TextSize=13
+    _z.ZIndex=2
     _z.Parent=_f
 
     local _result
