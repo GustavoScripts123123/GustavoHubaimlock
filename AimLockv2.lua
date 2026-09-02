@@ -5,10 +5,10 @@ local _0x={
     [4]="PlayerGui",
     [5]="GustavoHubKey",
     [6]="GTZ HUB",
-    [7]="Introduz a tua key...",
-    [8]="VALIDAR KEY",
-    [9]="A validar...",
-    [10]="Introduz uma key.",
+    [7]="Enter your key...",
+    [8]="VALIDATE KEY",
+    [9]="Validating...",
+    [10]="Enter a key.",
     [11]="https://gustavo-hub-api.errpila.workers.dev",
     [12]="application/json",
     [13]="no-cache",
@@ -37,7 +37,7 @@ local _pc=pcall
 local _ts=tostring
 local _ty=type
 
--- Logo do GTZ HUB: substitui pelo ID da imagem enviada para o Roblox.
+-- GTZ HUB logo.
 local _LOGO="rbxassetid://125548024440666"
 
 local _H=_g:GetService(_s(1))
@@ -68,7 +68,7 @@ end
 local _r=_rq()
 
 if not _r then
-    warn("GTZ HUB: HTTP indisponível.")
+    warn("GTZ HUB: HTTP unavailable.")
     return
 end
 
@@ -296,7 +296,7 @@ if not _k then
 end
 
 if not _k then
-    warn("GTZ HUB: key não encontrada.")
+    warn("GTZ HUB: key not found.")
     return
 end
 
@@ -312,7 +312,7 @@ local _v=_http(
 
 if not _v or _v[_s(20)]~=true then
     warn(
-        "GTZ HUB: key recusada ("..
+        "GTZ HUB: key rejected ("..
         tostring(_v and _v.reason or _s(23))..
         ")."
     )
@@ -323,7 +323,7 @@ end
 local _token=_v[_s(19)]
 
 if _ty(_token)~="string" or _token=="" then
-    warn("GTZ HUB: sessão inválida.")
+    warn("GTZ HUB: invalid session.")
     return
 end
 
@@ -337,7 +337,7 @@ local _payload=_http(
 
 if not _payload or _payload[_s(21)]~=true then
     warn(
-        "GTZ HUB: não foi possível obter o script ("..
+        "GTZ HUB: could not retrieve the script ("..
         tostring(
             _payload and
             _payload.reason or
@@ -352,7 +352,7 @@ end
 local _code=_payload[_s(22)]
 
 if _ty(_code)~="string" or _code=="" then
-    warn("GTZ HUB: script vazio.")
+    warn("GTZ HUB: empty script.")
     return
 end
 
@@ -364,7 +364,7 @@ end
 local _load=loadstring
 
 if _ty(_load)~="function" then
-    warn("GTZ HUB: loadstring indisponível.")
+    warn("GTZ HUB: loadstring unavailable.")
     return
 end
 
@@ -372,7 +372,7 @@ local _fn,_err=_load(_code)
 
 if not _fn then
     warn(
-        "GTZ HUB: erro ao carregar o script: "..
+        "GTZ HUB: error loading the script: "..
         tostring(_err)
     )
 
@@ -383,7 +383,7 @@ local _ok,_runtime=_pc(_fn)
 
 if not _ok then
     warn(
-        "GTZ HUB: erro ao executar o script: "..
+        "GTZ HUB: error executing the script: "..
         tostring(_runtime)
     )
 end
